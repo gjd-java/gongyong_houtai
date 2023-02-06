@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.gongyong.dao.GyBannerDao">
+
+	<select id="get" resultType="com.bootdo.gongyong.domain.GyBannerDO">
+		select `id`,`isimg`,`url`,`issubitem`,`link`,`isshow`,`sorts` from gy_banner where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.gongyong.domain.GyBannerDO">
+		select `id`,`isimg`,`url`,`issubitem`,`link`,`isshow`,`sorts` from gy_banner
+        <where>
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="isimg != null and isimg != ''"> and isimg = #{isimg} </if>
+		  		  <if test="url != null and url != ''"> and url = #{url} </if>
+		  		  <if test="issubitem != null and issubitem != ''"> and issubitem = #{issubitem} </if>
+		  		  <if test="link != null and link != ''"> and link = #{link} </if>
+		  		  <if test="isshow != null and isshow != ''"> and isshow = #{isshow} </if>
+		  		  <if test="sorts != null and sorts != ''"> and sorts = #{sorts} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by sorts asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="count" resultType="int">
+		select count(*) from gy_banner
+		 <where>
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="isimg != null and isimg != ''"> and isimg = #{isimg} </if>
+		  		  <if test="url != null and url != ''"> and url = #{url} </if>
+		  		  <if test="issubitem != null and issubitem != ''"> and issubitem = #{issubitem} </if>
+		  		  <if test="link != null and link != ''"> and link = #{link} </if>
+		  		  <if test="isshow != null and isshow != ''"> and isshow = #{isshow} </if>
+		  		  <if test="sorts != null and sorts != ''"> and sorts = #{sorts} </if>
+		  		</where>
+	</select>
+
+	<insert id="save" parameterType="com.bootdo.gongyong.domain.GyBannerDO">
+		insert into gy_banner
+		(
+			`id`,
+			`isimg`,
+			`url`,
+			`issubitem`,
+			`link`,
+			`sorts`,
+			`isshow`
+		)
+		values
+		(
+			#{id},
+			#{isimg},
+			#{url},
+			#{issubitem},
+			#{link},
+			#{sorts},
+			#{isshow}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.bootdo.gongyong.domain.GyBannerDO">
+		update gy_banner
+		<set>
+			<if test="isimg != null">`isimg` = #{isimg}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="issubitem != null">`issubitem` = #{issubitem}, </if>
+			<if test="link != null">`link` = #{link}, </if>
+			<if test="sorts != null">`sorts` = #{sorts}, </if>
+			<if test="isshow != null">`isshow` = #{isshow}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="remove">
+		delete from gy_banner where id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		delete from gy_banner where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

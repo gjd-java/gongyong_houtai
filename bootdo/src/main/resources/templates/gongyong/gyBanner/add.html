@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header">
+</head>
+<link href="/css/layui.css" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">文件类型：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline">
+										<input type="radio" name="isimg" value="1" checked/> 图片(60*60)
+									</label>
+									<label class="radio-inline" style="margin-left: 40px">
+										<input type="radio" name="isimg" value="0" /> 视频(128*128)
+									</label>
+								</div>
+							</div>
+								<div class="form-group">
+								<label class="col-sm-3 control-label">文件地址：</label>
+								<div class="col-sm-8">
+									<button type="button" class="layui-btn" id="test1">
+										<i class="fa fa-cloud"></i>上传文件
+									</button>
+									<div style="margin-top: 12px;">
+										<img id="showurl" style="max-width: 400px;width: 100%;display: none" src="">
+										<video  id="videourl" height="500" style="max-width: 400px;width: 100%;display: none" controls autobuffer></video>
+									</div>
+									<input id="url" name="url" class="form-control" type="hidden">
+								</div>
+							</div>
+<!--														<div class="form-group">-->
+<!--								<label class="col-sm-3 control-label">是否有子项内容：</label>-->
+<!--								<div class="col-sm-8">-->
+<!--									<div class="col-sm-8">-->
+<!--										<label class="radio-inline">-->
+<!--											<input type="radio" name="issubitem" value="0" checked/> 是-->
+<!--										</label>-->
+<!--										<label class="radio-inline" style="margin-left: 100px">-->
+<!--											<input type="radio" name="issubitem" value="1" /> 否-->
+<!--										</label>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+														<div class="form-group">
+								<label class="col-sm-3 control-label">点击跳转链接：</label>
+								<div class="col-sm-8">
+									<input id="link" name="link" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">排序：</label>
+								<div class="col-sm-8">
+									<input id="sorts" name="sorts" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">
+								<label class="col-sm-3 control-label">是否上架：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline">
+										<input type="radio" name="isshow" value="1" checked/>是
+									</label>
+									<label class="radio-inline" style="margin-left: 40px">
+										<input type="radio" name="isshow" value="0" /> 否
+									</label>
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script src="/js/layui.js"></script>
+	<script src="/js/plugins/layer/layer.min.js"></script>
+	<script type="text/javascript" src="/js/appjs/gongyong/gyBanner/add.js">
+	</script>
+	<script type="text/javascript">
+		layui.use('upload', function () {
+			var upload = layui.upload;
+			//执行实例
+			var uploadInst = upload.render({
+				elem: '#test1', //绑定元素
+				url: '/common/sysFile/upload', //上传接口
+				size: 100000,
+				accept: 'file',
+				done: function (r) {
+					var val = $("input[name='isimg']:checked").val();
+					if (val=="1") {
+						$("#showurl").css("display","block").attr("src",r.fileName);
+						$("#videourl").css("display","none")
+					}else{
+						$("#videourl").css("display","block").append("source").attr("src",r.fileName).attr("type","video/mp4");
+						$("#showurl").css("display","none")
+					}
+					$("#url").val(r.fileName);
+				},
+				error: function (r) {
+					layer.msg(r.msg);
+				}
+			});
+		});
+	</script>
+</body>
+</html>
